@@ -11,9 +11,12 @@ app.use(morgan("dev"));
 const PORT = 3000;
 
 app.get("/", (req, res) => {
-	res.send("Hello there from devops");
+	res.json({
+		message: "Hello from the devops",
+		success: true,
+	});
 });
 
 app.listen(PORT, () => {
-	console.log(`App is listening on the port ${PORT}`);
+	console.log(`App is listening on the http://localhost:${PORT}`);
 });
