@@ -1,2 +1,13 @@
+# Node dependencies
 node_modules/
+
+# Environment variables
+.env
 .env.*
+
+# Logs
+logs/
+*.log
+
+# Drizzle migration + generated files
+drizzle/
