@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
 import { db } from "../config/database.js";
 import logger from "../config/logger.js";
+import { users } from "../models/users.model.js";
 export const hashPassword = async (password) => {
 	try {
 		return await bcrypt.hash(password, 10);
@@ -13,7 +14,7 @@ export const hashPassword = async (password) => {
 
 export const createUser = async ({ name, email, password, role = "user" }) => {
 	try {
-		const existingUser = db
+		const existingUser = await db
 			.select()
 			.from(users)
 			.where(eq(users.email, email))
@@ -33,8 +34,10 @@ export const createUser = async ({ name, email, password, role = "user" }) => {
 				role: users.role,
 				created_at: users.created_at,
 			});
+
+		return newUser;
 	} catch (e) {
 		logger.error("Error creating the user the user", e);
-		throw new Error("Error handling");
+		throw new Error(`Error handling ${e}`);
 	}
 };

@@ -1,8 +1,10 @@
 import logger from "../config/logger.js";
 import { createUser } from "../services/auth.service.js";
+import { cookies } from "../utils/cookies.js";
 import { formValidationErrors } from "../utils/format.js";
 import { jwt_token } from "../utils/jwt.js";
 import { signUpSchema } from "../validations/auth.validations.js";
+
 export const signup = async (req, res, next) => {
 	try {
 		const ValidationResult = signUpSchema.safeParse(req.body);
@@ -17,6 +19,8 @@ export const signup = async (req, res, next) => {
 		const { name, email, password, role } = ValidationResult.data;
 
 		const user = await createUser({ name, email, password, role });
+
+		console.log(user);
 
 		const token = jwt_token.sign({
 			id: user.id,
@@ -38,7 +42,7 @@ export const signup = async (req, res, next) => {
 			},
 		});
 	} catch (e) {
-		logger.error("Signup error", e);
+		logger.error(`Signup error \n \n ${e}`);
 
 		if (e.message === "User with this email already exists") {
 			return res.status(409).json({
